@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "DatoCMS Welcome Mascot",
+  "description": "Shows a small welcome mascot on DatoCMS admin projects.",
+  "version": "0.1.0",
+  "content_scripts": [
+    {
+      "matches": ["https://*.admin.datocms.com/*"],
+      "js": ["assets/lottie.min.js", "content-script.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/mascot-idle.json", "assets/mascot-wave.json", "assets/mascot-talk.json", "assets/mascot-write.json", "assets/mascot-celebrate.json", "assets/mascot-think.json", "assets/mascot-eureka.json", "assets/mascot-toss.json", "assets/mascot-proud.json", "assets/mascot-intro.json", "assets/mascot-sad.json"],
+      "matches": ["https://*.admin.datocms.com/*"]
+    }
+  ]
+}
