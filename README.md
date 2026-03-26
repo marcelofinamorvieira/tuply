@@ -8,7 +8,10 @@ Built as a DatoCMS April Fools 2026 joke. Spiritual successor to [Clippy](https:
 
 ## What It Does
 
-When you visit any `*.admin.datocms.com` page, Tuply:
+When you visit any `*.admin.datocms.com` page, Tuply shows up to help.
+
+<details>
+<summary>Spoiler: what Tuply actually does</summary>
 
 1. **Pops in** with a wave and a cheerful "Welcome to DatoCMS!"
 2. **Introduces himself**: "I'm **Tuply**, your advanced AI assistant"
@@ -18,6 +21,8 @@ When you visit any `*.admin.datocms.com` page, Tuply:
    - **Write my content**: furiously writes with a thought bubble, then proudly presents: *"Lorem ipsum dolor sit amet"* with a copy-to-clipboard button
    - **Review my schema**: thinks hard, gets progressively sadder, then delivers: *"Oh my... You should start over."*
 5. **Idles** with a gentle breathing animation between interactions
+
+</details>
 
 ## Install
 
