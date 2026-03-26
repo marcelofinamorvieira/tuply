@@ -1,23 +1,40 @@
-# DatoCMS Clippy - April Fools 2026
+# Tuply - April Fools 2026
 
 **It looks like you're trying to use a headless CMS. Would you like help with that?**
 
-A Chrome extension that brings back the beloved office assistant experience — this time as DatoCMS's very own animated mascot named **Tuply**. A friendly, D-shaped, coral-orange companion that pops up on every DatoCMS admin page, offers "advanced AI operations", and delivers results that are technically correct.
+A Chrome extension that adds **Tuply**, DatoCMS's very own animated AI assistant, to every DatoCMS admin page. A friendly, D-shaped, coral-orange companion that offers "advanced AI operations" and delivers results that are technically correct.
 
-Built as DatoCMS's April Fools 2026 joke. A parody of Microsoft's Clippy, reimagined for the modern headless CMS era.
+Built as DatoCMS's April Fools 2026 joke. Spiritual successor to [Clippy](https://en.wikipedia.org/wiki/Office_Assistant) (1997-2007), gone but never forgotten.
 
 ## What It Does
 
 When you visit any `*.admin.datocms.com` page, Tuply:
 
 1. **Pops in** with a wave and a cheerful "Welcome to DatoCMS!"
-2. **Introduces himself** — "I'm **Tuply**, your advanced AI assistant"
+2. **Introduces himself**: "I'm **Tuply**, your advanced AI assistant"
 3. **Asks** what AI operation you want to use
 4. Offers three options:
-   - **AI Analysis** — "analyzes" your project for 15 seconds with a thinking animation, loading bar, and rotating status messages, then triumphantly announces: *"This is **definitely** a DatoCMS project."*
-   - **Write my content** — furiously writes with a thought bubble, then proudly presents: *"Lorem ipsum dolor sit amet"* with a copy-to-clipboard button
-   - **Review my schema** — thinks hard, gets progressively sadder, then delivers: *"Oh my... You should start over."*
+   - **AI Analysis**: "analyzes" your project for 15 seconds with a thinking animation, loading bar, and rotating status messages, then triumphantly announces: *"This is **definitely** a DatoCMS project."*
+   - **Write my content**: furiously writes with a thought bubble, then proudly presents: *"Lorem ipsum dolor sit amet"* with a copy-to-clipboard button
+   - **Review my schema**: thinks hard, gets progressively sadder, then delivers: *"Oh my... You should start over."*
 5. **Idles** with a gentle breathing animation between interactions
+
+## Install
+
+**Option A: Download from releases**
+1. Download `tuply-ext.zip` from the [latest release](https://github.com/marcelofinamorvieira/tuply/releases/latest)
+2. Unzip it
+3. Open `chrome://extensions/` in Chrome
+4. Enable **Developer mode** (top-right toggle)
+5. Click **Load unpacked** and select the unzipped `tuply-ext` folder
+6. Visit any DatoCMS admin page
+
+**Option B: Clone the repo**
+1. `git clone https://github.com/marcelofinamorvieira/tuply.git`
+2. Open `chrome://extensions/` in Chrome
+3. Enable **Developer mode**
+4. Click **Load unpacked** and select the cloned folder
+5. Visit any DatoCMS admin page
 
 ## The Mascot
 
@@ -67,14 +84,6 @@ Animations are generated with [Motchi](https://motchi.art/) as Lottie JSON files
 │   └── build_animated_mascot.py  # Legacy SVG mascot builder
 ```
 
-## Installing
-
-1. Clone this repo
-2. Open `chrome://extensions/` in Chrome
-3. Enable **Developer mode**
-4. Click **Load unpacked** and select the project folder
-5. Navigate to any DatoCMS admin page
-
 ## How It Works
 
 ### Architecture
@@ -90,12 +99,12 @@ The dialogue system is a **state machine** defined as a plain config object. Eac
 
 Source animations from Motchi come as raster Lottie files (embedded PNG frames) at 12fps. Our pipeline makes them production-ready:
 
-1. **Frame interpolation** — `scripts/interpolate_lottie.py` uses [RIFE](https://github.com/nihui/rife-ncnn-vulkan) (AI video frame interpolation) to go from 12fps to 48fps
-2. **Alpha preservation** — Frames are split into RGB + alpha channels, interpolated separately, then recombined (RIFE doesn't handle transparency natively)
-3. **Alpha sharpening** — A levels adjustment crisps up soft edges from the interpolation
-4. **Recoloring** — `scripts/recolor_lottie.py` hue-shifts the shoe color from blue (#0081DC) to purple (#6200C4) across all frames
-5. **Segment baking** — Animations with intro + loop portions (writing, sad) have their ping-pong loops baked directly into the frame sequence for jitter-free looping
-6. **Optimization** — `scripts/optimize_lottie.py` downscales frames from 512px to 256px and runs pngquant lossy compression (~89% size reduction)
+1. **Frame interpolation**: `scripts/interpolate_lottie.py` uses [RIFE](https://github.com/nihui/rife-ncnn-vulkan) (AI video frame interpolation) to go from 12fps to 48fps
+2. **Alpha preservation**: Frames are split into RGB + alpha channels, interpolated separately, then recombined (RIFE doesn't handle transparency natively)
+3. **Alpha sharpening**: A levels adjustment crisps up soft edges from the interpolation
+4. **Recoloring**: `scripts/recolor_lottie.py` hue-shifts the shoe color from blue (#0081DC) to purple (#6200C4) across all frames
+5. **Segment baking**: Animations with intro + loop portions (writing, sad) have their ping-pong loops baked directly into the frame sequence for jitter-free looping
+6. **Optimization**: `scripts/optimize_lottie.py` downscales frames from 512px to 256px and runs pngquant lossy compression (~89% size reduction)
 
 ### Dialogue Tree
 
