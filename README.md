@@ -4,7 +4,7 @@
 
 A Chrome extension that adds **Tuply**, DatoCMS's very own animated AI assistant, to every DatoCMS admin page. A friendly, D-shaped, coral-orange companion that offers "advanced AI operations" and delivers results that are technically correct.
 
-Built as DatoCMS's April Fools 2026 joke. Spiritual successor to [Clippy](https://en.wikipedia.org/wiki/Office_Assistant) (1997-2007), gone but never forgotten.
+Built as a DatoCMS April Fools 2026 joke. Spiritual successor to [Clippy](https://en.wikipedia.org/wiki/Office_Assistant) (1997-2007), gone but never forgotten.
 
 ## What It Does
 
