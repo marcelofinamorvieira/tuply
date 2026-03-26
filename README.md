@@ -2,35 +2,40 @@
 
 **It looks like you're trying to use a headless CMS. Would you like help with that?**
 
-A Chrome extension that brings back the beloved office assistant experience — this time as DatoCMS's very own animated mascot. A friendly, D-shaped, coral-orange companion that greets you on every DatoCMS admin page, offers "helpful" documentation links, performs groundbreaking "AI Analysis" of your project, and eagerly collects your feedback.
+A Chrome extension that brings back the beloved office assistant experience — this time as DatoCMS's very own animated mascot named **Tuply**. A friendly, D-shaped, coral-orange companion that pops up on every DatoCMS admin page, offers "advanced AI operations", and delivers results that are technically correct.
 
 Built as DatoCMS's April Fools 2026 joke. A parody of Microsoft's Clippy, reimagined for the modern headless CMS era.
 
 ## What It Does
 
-When you visit any `*.admin.datocms.com` page, the mascot:
+When you visit any `*.admin.datocms.com` page, Tuply:
 
-1. **Slides in** with a wave and a cheerful "Welcome to DatoCMS!"
-2. **Asks** what you want to learn about today
-3. Offers three options:
-   - **Documentation** — links to actual DatoCMS docs (Content modeling, Media & assets, GraphQL API)
-   - **AI Analysis** — "analyzes" your project for 15 seconds with a thinking animation and loading bar, then triumphantly announces: *"This is definitely a DatoCMS project."*
-   - **Send feedback** — a fake feedback form with a writing animation (the mascot takes notes!)
-4. **Idles** with a gentle breathing animation between interactions
+1. **Pops in** with a wave and a cheerful "Welcome to DatoCMS!"
+2. **Introduces himself** — "I'm **Tuply**, your advanced AI assistant"
+3. **Asks** what AI operation you want to use
+4. Offers three options:
+   - **AI Analysis** — "analyzes" your project for 15 seconds with a thinking animation, loading bar, and rotating status messages, then triumphantly announces: *"This is **definitely** a DatoCMS project."*
+   - **Write my content** — furiously writes with a thought bubble, then proudly presents: *"Lorem ipsum dolor sit amet"* with a copy-to-clipboard button
+   - **Review my schema** — thinks hard, gets progressively sadder, then delivers: *"Oh my... You should start over."*
+5. **Idles** with a gentle breathing animation between interactions
 
 ## The Mascot
 
-Seven animation states, all AI-interpolated from 12fps to 48fps for buttery smooth playback:
+Eleven animation states, all AI-interpolated from 12fps to 48fps for buttery smooth playback:
 
 | Animation | Description |
 |---|---|
 | Wave | Entrance greeting |
+| Intro | Self-introduction pose |
 | Talk | Explaining things with enthusiasm |
 | Idle | Breathing quietly, waiting to help |
 | Think | Deep in thought during "AI Analysis" |
 | Eureka | The big reveal moment |
-| Write | Taking notes on your feedback |
-| Celebrate | Thanking you for feedback |
+| Proud | Smug pride after "discovering" your project is DatoCMS |
+| Write | Furiously writing content (segment-based: notepad grab → writing loop) |
+| Celebrate | Jumping celebration when presenting content |
+| Sad | Progressively sadder after reviewing your schema (baked squint loop) |
+| Toss | Throwing away paper after copying content |
 
 Animations are generated with [Motchi](https://motchi.art/) as Lottie JSON files with embedded PNG frames, then processed through our custom pipeline.
 
@@ -42,18 +47,23 @@ Animations are generated with [Motchi](https://motchi.art/) as Lottie JSON files
 ├── content-script.js             # All logic: dialogue tree, animation state machine, UI
 ├── assets/
 │   ├── lottie.min.js             # Bundled lottie-web player (v5.12.2)
-│   ├── mascot-idle.json          # Idle breathing animation (48fps)
-│   ├── mascot-wave.json          # Waving hello animation (48fps)
-│   ├── mascot-talk.json          # Talking animation (48fps)
-│   ├── mascot-think.json         # Thinking animation (48fps)
-│   ├── mascot-eureka.json        # Eureka/discovery animation (48fps)
-│   ├── mascot-write.json         # Writing/note-taking animation (48fps, baked ping-pong)
-│   ├── mascot-celebrate.json     # Celebration animation (48fps)
-│   └── backups/                  # Original animations before recoloring
+│   ├── mascot-idle.json          # Idle breathing (48fps)
+│   ├── mascot-wave.json          # Waving hello (48fps)
+│   ├── mascot-intro.json         # Self-introduction (48fps)
+│   ├── mascot-talk.json          # Talking (48fps)
+│   ├── mascot-think.json         # Thinking (48fps)
+│   ├── mascot-eureka.json        # Eureka moment (48fps)
+│   ├── mascot-proud.json         # Proud/smug pose (48fps)
+│   ├── mascot-write.json         # Writing (48fps, baked ping-pong segments)
+│   ├── mascot-celebrate.json     # Jumping celebration (48fps)
+│   ├── mascot-sad.json           # Thinking → sad (48fps, baked squint loop)
+│   ├── mascot-toss.json          # Throwing paper away (48fps)
+│   └── backups/                  # Original animations before recoloring (gitignored)
 ├── scripts/
 │   ├── interpolate_lottie.py     # AI frame interpolation pipeline (RIFE)
 │   ├── recolor_lottie.py         # Hue-shift recoloring script
-│   ├── rife-ncnn-vulkan/         # RIFE binary + models (not committed)
+│   ├── optimize_lottie.py        # Downscale + pngquant compression
+│   ├── rife-ncnn-vulkan/         # RIFE binary + models (gitignored)
 │   └── build_animated_mascot.py  # Legacy SVG mascot builder
 ```
 
@@ -84,25 +94,35 @@ Source animations from Motchi come as raster Lottie files (embedded PNG frames) 
 2. **Alpha preservation** — Frames are split into RGB + alpha channels, interpolated separately, then recombined (RIFE doesn't handle transparency natively)
 3. **Alpha sharpening** — A levels adjustment crisps up soft edges from the interpolation
 4. **Recoloring** — `scripts/recolor_lottie.py` hue-shifts the shoe color from blue (#0081DC) to purple (#6200C4) across all frames
-5. **Segment baking** — The writing animation has its ping-pong loop baked directly into the frame sequence for jitter-free looping
+5. **Segment baking** — Animations with intro + loop portions (writing, sad) have their ping-pong loops baked directly into the frame sequence for jitter-free looping
+6. **Optimization** — `scripts/optimize_lottie.py` downscales frames from 512px to 256px and runs pngquant lossy compression (~89% size reduction)
 
 ### Dialogue Tree
 
 ```
 greeting ("Welcome to DatoCMS!")
   └─ wave animation
-      └─ menu ("What do you want to learn about today?")
-          ├─ Documentation → docs submenu → links to real docs
-          ├─ AI Analysis → 15s loading bar → "This is definitely a DatoCMS project."
-          └─ Send feedback → textarea + writing animation → "Thank you!"
+      └─ introduction ("I'm Tuply, your advanced AI assistant")
+          └─ intro animation
+              └─ menu ("What AI operation do you want to use?")
+                  ├─ AI Analysis → think (15s loading bar + status text)
+                  │   └─ "This is definitely a DatoCMS project" → eureka → proud loop
+                  ├─ Write my content → write (thought bubble, 8s)
+                  │   └─ "Lorem ipsum dolor sit amet" [copy] → celebrate → toss on copy
+                  └─ Review my schema → sad (thinking → squint loop)
+                      └─ "Oh my..." → "You should start over." → ← Back
 ```
 
 ### Special Animation Behaviors
 
 - **Ping-pong idle**: The idle animation plays forward then backward seamlessly since the source animation doesn't loop
 - **Segment-based writing**: Intro (getting notepad) plays once, then only the middle writing portion loops, avoiding the repetitive notepad grab
-- **Timed AI analysis**: The thinking animation loops for exactly 15 seconds while a loading bar fills up, then auto-advances to the result
+- **Baked sad squint**: The sad animation's squint loop is baked with 0.5s holds at each end for expressive, deliberate squinting
+- **Timed AI analysis**: The thinking animation loops for 15 seconds with a loading bar and rotating status text (scanning records, analyzing models, etc.)
+- **Thought bubble**: The content writing state uses a comic-book thought cloud with animated trailing circles
+- **Pop-in bubbles**: Every speech bubble transition replays a bouncy pop-in animation with a 300ms delay
 - **Cross-fade transitions**: All animation swaps use a 250ms fade to avoid jarring cuts
+- **Per-state idle overrides**: AI result uses the proud animation instead of the default idle
 
 ## Build Scripts
 
@@ -119,6 +139,15 @@ chmod +x rife-ncnn-vulkan/rife-ncnn-vulkan
 python3 scripts/interpolate_lottie.py assets/mascot-idle.json --alpha-low 80 --alpha-high 175 --no-loop
 python3 scripts/interpolate_lottie.py assets/mascot-idle.json --alpha-low 80 --alpha-high 175 --no-loop
 ```
+
+### Optimization
+
+```bash
+# Downscale 512→256px + lossy PNG compression (pngquant)
+python3 scripts/optimize_lottie.py assets/mascot-*.json --size 256 --quality 60-80
+```
+
+Reduces file sizes by ~89% (254MB → 32MB total) with no visible quality loss at the 300px display size.
 
 ### Recoloring
 
@@ -138,6 +167,7 @@ cp assets/backups/*.json assets/
 | [rife-ncnn-vulkan](https://github.com/nihui/rife-ncnn-vulkan) | AI frame interpolation (build-time) | No |
 | [Pillow](https://python-pillow.org/) | Image processing for interpolation pipeline | No |
 | [NumPy](https://numpy.org/) | Fast pixel manipulation for recoloring | No |
+| [pngquant](https://pngquant.org/) | Lossy PNG compression for optimization | No (`brew install pngquant`) |
 | Python 3.8+ | Runs build scripts | No |
 
 ## Credits
