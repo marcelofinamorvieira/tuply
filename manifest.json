@@ -1,8 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "DatoCMS Welcome Mascot",
-  "description": "Shows a small welcome mascot on DatoCMS admin projects.",
-  "version": "0.1.0",
+  "name": "Tuply - DatoCMS AI Assistant",
+  "description": "Tuply, your advanced AI assistant for DatoCMS.",
+  "version": "1.0.0",
+  "icons": {
+    "16": "store-assets/icon-16.png",
+    "48": "store-assets/icon-48.png",
+    "128": "store-assets/icon-128.png"
+  },
   "content_scripts": [
     {
       "matches": ["https://*.admin.datocms.com/*"],
